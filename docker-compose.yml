@@ -1,0 +1,15 @@
+version: '3.4'
+
+services:
+  speechapp.web:
+    image: ${DOCKER_REGISTRY-}speechappweb
+    build:
+      context: .
+      dockerfile: SpeechApp.Web/Dockerfile
+
+  speechapp.api:
+    image: ${DOCKER_REGISTRY-}speechappapi
+    build:
+      context: .
+      dockerfile: SpeechApp.API/Dockerfile
+
