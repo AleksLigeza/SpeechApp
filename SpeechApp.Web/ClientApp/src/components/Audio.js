@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { AudioAnalyser } from './AudioAnalyser';
+import { TilesBoard } from '../game/TilesBoard';
 
 export class Audio extends Component {
     static displayName = Audio.name;
@@ -42,6 +43,9 @@ export class Audio extends Component {
                 </button>
 
                 {this.state.audio ? <AudioAnalyser audio={this.state.audio} /> : ''}
+
+                <TilesBoard />
+
             </div>
         );
     }

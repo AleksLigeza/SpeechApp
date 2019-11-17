@@ -5,7 +5,7 @@ import { Home } from './components/Home';
 import { FetchData } from './components/FetchData';
 import { Audio } from './components/Audio';
 
-import './custom.css'
+import './custom.scss'
 
 export default class App extends Component {
   static displayName = App.name;

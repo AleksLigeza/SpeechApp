@@ -71,8 +71,6 @@ namespace SpeechApp.API.SignalR
 
         public void ReceiveAudio(byte[] audioChunk)
         {
-            Debug.WriteLine("Got chunk: " + audioChunk.Length);
-
             _connections[Context.ConnectionId].AudioStream.Write(audioChunk, 0, audioChunk.Length);
         }
 

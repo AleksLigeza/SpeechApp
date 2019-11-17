@@ -1,0 +1,80 @@
+﻿@import './vars.scss';
+
+body {
+    font-family: Arial, sans-serif;
+}
+
+.tile {
+    width: $tile-size;
+    height: $tile-size;
+    margin: $tile-margin;
+    display: inline-block;
+    border: 1px solid black;
+    text-align: center;
+    vertical-align: middle;
+    line-height: $tile-size;
+    font-size: $tile-size / 2;
+    color: #f9f6f2;
+}
+
+.board {
+    margin: 10px;
+    padding: 5px;
+    border: 1px solid black;
+    width: 4 * $tile-size + 8 * $tile-margin + 12px;
+    vertical-align: middle;
+    height: 4 * $tile-size + 8 * $tile-margin + 12px;
+}
+
+.tile-2 {
+    color: #776e65;
+    background: #eee4da;
+}
+
+.tile-4 {
+    color: #776e65;
+    background: #ede0c8;
+}
+
+.tile-8 {
+    background: #f2b179;
+}
+
+.tile-16 {
+    background: #f59563;
+}
+
+.tile-32 {
+    background: #f67c5f;
+}
+
+.tile-64 {
+    background: #f65e3b;
+}
+
+.tile-128 {
+    background: #edcf72;
+}
+
+.tile-256 {
+    background: #edcc61;
+}
+
+.tile-512 {
+    background: #edc850;
+}
+
+.tile-1024 {
+    background: #edc53f;
+    font-size: $tile-size / 3;
+}
+
+.tile-2048 {
+    background: #edc22e;
+    font-size: $tile-size / 3;
+}
+
+.tile-4096 {
+    background: #3c3a32;
+    font-size: $tile-size / 3;
+}
