@@ -1,5 +1,6 @@
 ﻿import React, { Component } from 'react';
 import { Tile } from './Tile'
+import { upArrow, downArrow, leftArrow, rightArrow } from '../Settings.js';
 
 export class TilesBoard extends Component {
     constructor() {
@@ -23,42 +24,25 @@ export class TilesBoard extends Component {
             () => this.generateNewTile('down'));
     }
 
-    generateNewTile(direction) {
+    generateNewTile() {
         var indexes = this.findEmptyTiles();
-
-        if (indexes.length == 0 && this.isEveryTileBlocked(direction)) {
-            this.setState({ isTotallyBlocked: true });
-            return;
-        }
-
         var index = indexes[Math.floor(Math.random() * indexes.length)];
         var tiles = this.state.tiles;
         tiles[index] = Math.random() > 0.89 ? 4 : 2;
         this.setState({ tiles });
     }
 
-    isEveryTileBlocked(direction) {
-        var tiles = this.state.tiles;
-        var transform = this.getTransform(direction);
-        for (var index = 0; index < tiles.length; index++) {
-            var isBlocked = this.isTileBlocked(index, transform);
-            if (!isBlocked) {
-                return false;
-            }
-        }
-        return false;
-    }
-
     moveTiles(direction) {
         var tiles = this.state.tiles;
         var transform = this.getTransform(direction);
 
-        if (direction == 'down' || direction == 'right') {
-            for (var index = tiles.length - 1; index >= 0; index--) {
+        var index = 0;
+        if (direction === 'down' || direction === 'right') {
+            for (index = tiles.length - 1; index >= 0; index--) {
                 this.moveSingleTile(tiles, index, transform)
             }
         } else {
-            for (var index = 0; index < tiles.length; index++) {
+            for (index = 0; index < tiles.length; index++) {
                 this.moveSingleTile(tiles, index, transform)
             }
         }
@@ -99,12 +83,26 @@ export class TilesBoard extends Component {
         tiles[index] = 0;
     }
 
+    isEveryTileBlocked(direction) {
+        var tiles = this.state.tiles;
+        var transform = this.getTransform(direction);
+        for (var index = 0; index < tiles.length; index++) {
+            var value = tiles[index];
+            if (value === 0) {
+                continue;
+            }
+
+            var isBlocked = this.isTileBlocked(index, transform);
+            if (!isBlocked) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     isTileBlocked(index, transform) {
         var tiles = this.state.tiles;
         var value = tiles[index];
-        if (value === 0) {
-            return false;
-        }
 
         var neighbor = transform(index);
         if (neighbor === -1) {
@@ -123,7 +121,7 @@ export class TilesBoard extends Component {
 
     findEmptyTiles() {
         var indexes = [];
-        this.state.tiles.some(function (entry, i) {
+        this.state.tiles.forEach((entry, i) => {
             if (entry === 0) {
                 indexes.push(i);
             }
@@ -133,7 +131,7 @@ export class TilesBoard extends Component {
 
     getLeftIndex(index) {
         var fromLeft = index % 4;
-        if (fromLeft == 0) {
+        if (fromLeft === 0) {
             return -1;
         }
         return index - 1;
@@ -141,7 +139,7 @@ export class TilesBoard extends Component {
 
     getRightIndex(index) {
         var fromLeft = index % 4;
-        if (fromLeft == 3) {
+        if (fromLeft === 3) {
             return -1;
         }
         return index + 1;
@@ -175,17 +173,27 @@ export class TilesBoard extends Component {
 
     handleKeyDown(e) {
         let direction = '';
+        
         switch (e.keyCode) {
-            case 37: direction = 'left'; break;
-            case 38: direction = 'up'; break;
-            case 39: direction = 'right'; break;
-            case 40: direction = 'down'; break;
+            case leftArrow: direction = 'left'; break;
+            case upArrow: direction = 'up'; break;
+            case rightArrow: direction = 'right'; break;
+            case downArrow: direction = 'down'; break;
             default: return;
         }
 
-        if (direction) {
+        if (direction && !this.isEveryTileBlocked(direction)) {
             this.moveTiles(direction);
             this.generateNewTile(direction);
+            this.checkEndOfTheGame(direction);
+        }
+    }
+
+    checkEndOfTheGame(direction) {
+        var indexes = this.findEmptyTiles();
+        if (indexes.length === 0 && this.isEveryTileBlocked(direction)) {
+            this.setState({ isTotallyBlocked: true });
+            return;
         }
     }
 
@@ -198,6 +206,7 @@ export class TilesBoard extends Component {
                         <Tile key={i} value={tileValue} />
                     ))}
                 </div>
+                {React.version}
             </div>
         );
     }
