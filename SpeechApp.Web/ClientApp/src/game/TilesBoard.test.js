@@ -3,6 +3,7 @@ import { shallow } from 'enzyme';
 import { expect } from 'chai'
 import { TilesBoard } from './TilesBoard';
 import { upArrow, downArrow, leftArrow, rightArrow } from '../Settings.js';
+import { GameMessage } from './GameMessage';
 
 function simulateKeyDown(keyCode) {
     var event = new KeyboardEvent('keydown', { keyCode: keyCode });
@@ -74,6 +75,30 @@ it('is totally blocked after the end', () => {
     var wrapper = getComponent();
     wrapper.setState({ tiles: getBeforeEndTiles() });
     simulateKeyDown(upArrow);
-    console.log(wrapper.state('tiles'))
     expect(wrapper.state('isTotallyBlocked')).to.be.eq(true);
+});
+
+it('is with message after the end', () => {
+    var wrapper = getComponent();
+    wrapper.setState({ isTotallyBlocked: true });
+    expect(wrapper.find(GameMessage).exists()).to.be.eq(true);
+});
+
+
+it('is without message before the end', () => {
+    var wrapper = getComponent();
+    expect(wrapper.find(GameMessage).exists()).to.be.eq(false);
+});
+
+it('doesnt join multiple tiles', () => {
+    var wrapper = getComponent();
+    var tiles = getEmptyTiles();
+    tiles[0] = 2;
+    tiles[2] = 2;
+    tiles[3] = 4;
+    wrapper.setState({ tiles });
+
+    simulateKeyDown(leftArrow);
+    console.log(wrapper.state('tiles'))
+    expect(wrapper.state('tiles').filter(x => x === 8)).to.have.length(0);
 });
