@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { AudioAnalyser } from './AudioAnalyser';
-import TilesBoard from '../game/TilesBoard';
+import AudioAnalyser from './AudioAnalyser';
+import TilesBoard from './TilesBoard';
 
 export class Audio extends Component {
     static displayName = Audio.name;

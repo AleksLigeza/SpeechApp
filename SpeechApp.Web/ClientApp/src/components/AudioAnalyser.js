@@ -1,8 +1,11 @@
 ﻿import React, { Component } from 'react';
 import { AudioVisualiser } from './AudioVisualiser';
 import { HubClient } from './HubClient';
+import { moveLeft, moveRight, moveUp, moveDown } from '../redux/actions/index'
+import { connect } from 'react-redux';
+import { left, right, up, down } from '../game/gameConstants';
 
-export class AudioAnalyser extends Component {
+class AudioAnalyser extends Component {
 
     constructor(props) {
         super(props);
@@ -50,7 +53,16 @@ export class AudioAnalyser extends Component {
 
     onMsgHandler(message) {
         const messages = this.state.messages.concat([message]);
-        this.setState({ messages });
+        //this.setState({ messages });
+        console.log(message);
+        switch (message) {
+            case 'Left.': this.props.moveLeft(); break;
+            case 'Up.': this.props.moveUp(); break;
+            case 'Right.': this.props.moveRight(); break;
+            case 'Down.': this.props.moveDown(); break;
+            // case reset
+            default: return;
+        }
     }
 
     render() {
@@ -69,3 +81,16 @@ export class AudioAnalyser extends Component {
         );
     }
 }
+
+function mapStateToProps(state) {
+    return {};
+  }
+
+const mapDispatchToProps = {
+    moveLeft,
+    moveRight,
+    moveDown,
+    moveUp
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(AudioAnalyser);
