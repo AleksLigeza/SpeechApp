@@ -36,7 +36,6 @@ namespace SpeechApp.API
                         .AllowCredentials();
                 });
             });
-            services.AddControllers();
             services.AddSignalR()
                 .AddMessagePackProtocol();
         }

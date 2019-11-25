@@ -3,14 +3,29 @@ import { mount } from 'enzyme';
 import TilesBoard from './TilesBoard';
 import { storeFactory } from '../redux/storeFactory';
 import { Provider } from 'react-redux';
+import GameMessage from './GameMessage';
+import { expect } from 'chai'
+
+function getBoard() {
+    return mount(
+            <Provider store={storeFactory}>
+                <TilesBoard />
+            </Provider>
+        )
+        .find(TilesBoard)
+        .children()
+        .first();
+}
 
 it('renders without crashing', () => {
-    mount(<Provider store={storeFactory}><TilesBoard /></Provider>);
+    getBoard();
 });
 
 it('is with message after the end', () => {
+    
     var board = getBoard();
-    board.setState({ isTotallyBlocked: true });
+    board.instance().setState({ isTotallyBlocked: true });
+    board.update();
     expect(board.find(GameMessage).exists()).to.be.eq(true);
 });
 

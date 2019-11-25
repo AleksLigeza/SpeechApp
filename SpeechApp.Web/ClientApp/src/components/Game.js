@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import AudioAnalyser from './AudioAnalyser';
 import TilesBoard from './TilesBoard';
 
-export class Audio extends Component {
-    static displayName = Audio.name;
+export class Game extends Component {
+    static displayName = Game.name;
 
     constructor(props) {
         super(props);

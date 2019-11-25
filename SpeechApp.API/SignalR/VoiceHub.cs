@@ -82,10 +82,10 @@ namespace SpeechApp.API.SignalR
 
         private async void _speechClient_Recognized(object sender, SpeechRecognitionEventArgs e)
         {
-            var text = new string(e.Result.Text.Where(char.IsLetter).ToArray());
+            var text = new string(e.Result.Text.Where(char.IsLetter).ToArray()).ToLower();
             if (phrases.Contains(text, StringComparer.InvariantCultureIgnoreCase))
             {
-                await SendTranscript(e.Result.Text, e.SessionId);
+                await SendTranscript(text, e.SessionId);
             }
         }
 
