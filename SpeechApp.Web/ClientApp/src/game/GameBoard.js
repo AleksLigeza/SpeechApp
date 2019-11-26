@@ -1,13 +1,15 @@
 import { left, right, up, down } from './gameConstants';
+import { GameTile } from './GameTile';
+import { MovingTile } from './MovingTile';
 
 export class GameBoard {
     constructor({ tiles, isTotallyBlocked }) {
-        this.tiles = [...tiles];
+        this.tiles = [...tiles.map(x => new GameTile(x.value))];
         this.isTotallyBlocked = isTotallyBlocked;
     }
 
     static getEmptyArray() {
-        return new Array(16).fill(0);
+        return new Array(16).fill(0).map(x => new GameTile(x));
     }
 
     static getInitState() {
@@ -32,9 +34,13 @@ export class GameBoard {
         this.generateNewTile();
     }
 
-    checkEndOfTheGame(direction) {
+    checkEndOfTheGame() {
         var indexes = this.findEmptyTiles();
-        if (indexes.length === 0 && this.isEveryTileBlocked(direction)) {
+        if (indexes.length === 0 
+            && this.isEveryTileBlocked(up) 
+            && this.isEveryTileBlocked(down) 
+            && this.isEveryTileBlocked(left) 
+            && this.isEveryTileBlocked(right)) {
             this.isTotallyBlocked = true;
             return;
         }
@@ -43,9 +49,8 @@ export class GameBoard {
     generateNewTile() {
         var indexes = this.findEmptyTiles();
         var index = indexes[Math.floor(Math.random() * indexes.length)];
-        var tiles = this.tiles;
-        tiles[index] = Math.random() > 0.89 ? 4 : 2;
-        this.tiles = tiles;
+        var value = Math.random() > 0.89 ? 4 : 2;
+        this.tiles[index] = new GameTile(value);
     }
 
     moveTiles(direction) {
@@ -75,7 +80,7 @@ export class GameBoard {
     }
 
     moveSingleTile(index, transform) {
-        var value = this.tiles[index];
+        var value = this.tiles[index].value;
         if (value === 0) {
             return;
         }
@@ -85,25 +90,27 @@ export class GameBoard {
             return;
         }
 
-        var neighborValue = this.tiles[neighbor];
-        if (neighborValue === value) {
-            this.tiles[neighbor] += value;
-
+        var neighborTile = this.tiles[neighbor];
+        var neighborValue = neighborTile.value;
+        if (neighborValue === value && !neighborTile.isMerged) {
+            neighborTile.value += value;
+            neighborTile.setMerged();
+            this.tilesToMove = [].concat(new MovingTile(value, value * 2, index, neighbor));
         } else if (neighborValue === 0) {
-            this.tiles[neighbor] = value;
+            neighborTile.value = value;
             this.moveSingleTile(neighbor, transform);
         } else {
             return;
         }
 
-        this.tiles[index] = 0;
+        this.tiles[index].value = 0;
     }
 
     isEveryTileBlocked(direction) {
         var tiles = this.tiles;
         var transform = this.getTransform(direction);
         for (var index = 0; index < tiles.length; index++) {
-            var value = tiles[index];
+            var value = tiles[index].value;
             if (value === 0) {
                 continue;
             }
@@ -118,14 +125,14 @@ export class GameBoard {
 
     isTileBlocked(index, transform) {
         var tiles = this.tiles;
-        var value = tiles[index];
+        var value = tiles[index].value;
 
         var neighbor = transform(index);
         if (neighbor === -1) {
             return true;
         }
 
-        var neighborValue = tiles[neighbor];
+        var neighborValue = tiles[neighbor].value;
         if (neighborValue === value) {
             return false;
         } else if (neighborValue === 0) {
@@ -138,7 +145,7 @@ export class GameBoard {
     findEmptyTiles() {
         var indexes = [];
         this.tiles.forEach((entry, i) => {
-            if (entry === 0) {
+            if (entry.value === 0) {
                 indexes.push(i);
             }
         });
@@ -179,7 +186,7 @@ export class GameBoard {
         if (direction && !this.isEveryTileBlocked(direction)) {
             this.moveTiles(direction);
             this.generateNewTile(direction);
-            this.checkEndOfTheGame(direction);
+            this.checkEndOfTheGame();
         }
     }
 }

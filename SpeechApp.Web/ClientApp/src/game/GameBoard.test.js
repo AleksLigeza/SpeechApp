@@ -1,8 +1,9 @@
 import { expect } from 'chai'
 import { GameBoard } from './GameBoard';
 import { left, right, up, down } from './gameConstants';
+import { GameTile } from './GameTile';
 
-function getBoard(tiles = GameBoard.getInitState().tiles) {
+function getBoard(tiles = GameBoard.getInitState()) {
     return new GameBoard(tiles);
 }
 
@@ -12,57 +13,80 @@ function getBeforeEndTiles() {
         4, 2, 4, 2,
         2, 4, 2, 8,
         4, 2, 8, 8
-    ];
+    ].map(x => new GameTile(x));
 }
 
-it('init state is with single tile', () => {
-    var tiles = GameBoard.getInitState().filter(x => x > 0);
-    expect(tiles).to.have.lengthOf(1);
+it('after restart is with single tile', () => {
+    var board = getBoard();
+
+    board.restart();
+
+    expect(board.tiles.filter(x => x.value > 0)).to.have.lengthOf(1);
 });
 
 it('three tiles - moves properly', () => {
     var board = getBoard();
     var tiles = GameBoard.getEmptyArray();
-    tiles[4] = tiles[8] = tiles[12] = 2;
+    tiles[4].value = tiles[8].value = tiles[12].value = 2;
     board.tiles = tiles;
     
     board.move(down);
 
-    expect(board.state('tiles')[12]).to.be.equals(4);
-    expect(board.state('tiles')[8]).to.be.equals(2);
+    expect(board.tiles[12].value).to.be.equals(4);
+    expect(board.tiles[8].value).to.be.equals(2);
 });
 
 it('four tiles - cant move', () => {
     var board = getBoard();
     var tiles = GameBoard.getEmptyArray();
-    tiles[0] = tiles[4] = tiles[8] = tiles[12] = 8;
-    board.setState({ tiles });
+    tiles[0].value = tiles[4].value = tiles[8].value = tiles[12].value = 8;
+    board.tiles = tiles;
+
     board.move(left);
-    expect(board.state('tiles').filter(x => x > 0)).to.have.length(4);
+
+    expect(board.tiles.filter(x => x.value > 0)).to.have.length(4);
 });
 
 it('is not totally blocked before the end', () => {
     var board = getBoard();
+
     board.move(up);
-    expect(board.state('isTotallyBlocked')).to.be.eq(false);
+
+    expect(board.isTotallyBlocked).to.be.eq(false);
 });
 
 it('is totally blocked after the end', () => {
     var board = getBoard();
-    board.setState({ tiles: getBeforeEndTiles() });
+    board.tiles = getBeforeEndTiles();
+
     board.move(up);
-    expect(board.state('isTotallyBlocked')).to.be.eq(true);
+
+    expect(board.isTotallyBlocked).to.be.eq(true);
 });
 
 it('doesnt join multiple tiles', () => {
     var board = getBoard();
     var tiles = GameBoard.getEmptyArray();
-    tiles[0] = 2;
-    tiles[2] = 2;
-    tiles[3] = 4;
-    board.setState({ tiles });
+    tiles[0].value = 2;
+    tiles[2].value = 2;
+    tiles[3].value = 4;
+    board.tiles = tiles;
 
     board.move(left);
-    console.log(board.state('tiles'))
-    expect(board.state('tiles').filter(x => x === 8)).to.have.length(0);
+
+    expect(board.tiles.filter(x => x.value === 8)).to.have.length(0);
+});
+
+it('doesnt end without blocked tiles', () => {
+    var board = getBoard();
+    board.tiles = [
+        2, 2, 2, 0,
+        4, 4, 4, 4,
+        2, 2, 2, 2,
+        4, 4, 4, 4,
+    ].map(x => new GameTile(x));
+
+    board.move(up);
+
+    expect(board.isTotallyBlocked).to.be.eq(false);
 });
