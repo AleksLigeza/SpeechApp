@@ -5,7 +5,7 @@ export const gameBoardReducers = (state = GameBoard.getInitState(), action) => {
     var board = new GameBoard(state);
     switch (action.type) {
         case INITIALIZE: {
-            board.restart();
+            board.reset();
             const result = board.toResult();
             return { ...state, ...result };
         }
@@ -30,7 +30,7 @@ export const gameBoardReducers = (state = GameBoard.getInitState(), action) => {
             return { ...state, ...result };
         }
         case RESET: {
-            board.restart();
+            board.reset();
             const result = board.toResult();
             return { ...state, ...result };
         }

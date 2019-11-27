@@ -3,7 +3,7 @@ import { AudioVisualiser } from './AudioVisualiser';
 import { HubClient } from './HubClient';
 import { moveLeft, moveRight, moveUp, moveDown, reset } from '../redux/actions/index'
 import { connect } from 'react-redux';
-import { left, right, up, down } from '../game/gameConstants';
+import { left, right, up, down, resetMsg } from '../game/gameConstants';
 
 class AudioAnalyser extends Component {
 
@@ -11,7 +11,6 @@ class AudioAnalyser extends Component {
         super(props);
         this.state = {
             audioData: new Uint8Array(0),
-            isAudioDetected: false,
             messages: [],
         };
 
@@ -35,13 +34,6 @@ class AudioAnalyser extends Component {
         this.analyser.getByteTimeDomainData(this.dataArray);
         this.setState({ audioData: this.dataArray });
         this.rafId = requestAnimationFrame(this.tick);
-
-        let isDetected = false;
-        if (this.dataArray.some(x => x !== 128)) {
-            isDetected = true;
-        }
-
-        this.setState({ isAudioDetected: isDetected });
     }
 
     componentWillUnmount() {
@@ -52,15 +44,15 @@ class AudioAnalyser extends Component {
     }
 
     onMsgHandler(message) {
-        const messages = this.state.messages.concat([message]);
-        this.setState({ messages });
+        //const messages = this.state.messages.concat([message]);
+        //this.setState({ messages });
         console.log(message);
         switch (message) {
             case left: this.props.moveLeft(); break;
             case up: this.props.moveUp(); break;
             case right: this.props.moveRight(); break;
             case down: this.props.moveDown(); break;
-            case reset: this.props.reset(); break;
+            case resetMsg: this.props.reset(); break;
             default: return;
         }
     }
@@ -68,8 +60,6 @@ class AudioAnalyser extends Component {
     render() {
         return (
             <div>
-                {this.state.isAudioDetected.toString()}
-                <br />
                 <AudioVisualiser audioData={this.state.audioData} />
                 <HubClient onMsgHandler={this.onMsgHandler} audioContext={this.audioContext} audio={this.props.audio} />
                 <div>
@@ -90,7 +80,8 @@ const mapDispatchToProps = {
     moveLeft,
     moveRight,
     moveDown,
-    moveUp
+    moveUp,
+    reset
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(AudioAnalyser);

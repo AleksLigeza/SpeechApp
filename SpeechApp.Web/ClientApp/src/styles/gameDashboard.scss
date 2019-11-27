@@ -1,0 +1,49 @@
+@import './vars.scss';
+
+.gameDashboard {
+    margin: 10px auto;
+    width: $board-size;
+    height: $dashboard-size;
+
+    @media screen and (max-width: $screen-sm-min) {
+        width: $board-size-mobile;
+    }
+
+    .title {
+        line-height: $dashboard-size;
+        font-size: $dashboard-size;
+        float: left;
+        font-weight: bold;
+        margin: 0;
+        display: block;
+        float: left;
+        color: $color-text-dark;
+
+        @media screen and (max-width: $screen-sm-min) {
+            font-size: $dashboard-size / 4 * 3;
+        }
+    }
+}
+
+button {
+    display: inline-block;
+    background: $color-background-dark;
+    border-radius: 10px;
+    text-decoration: none;
+    color: #f9f6f2;
+    text-decoration: none;
+    line-height: $dashboard-size;
+    display: block;
+    text-align: center;
+    margin: 0;
+    border: none;
+
+    &.resetButton {
+        float: right;
+        width: $board-size / 3;
+
+        @media screen and (max-width: $screen-sm-min) {
+            width: $board-size-mobile / 3;
+        }
+    }
+}

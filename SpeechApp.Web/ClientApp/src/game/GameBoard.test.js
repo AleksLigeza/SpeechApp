@@ -16,10 +16,10 @@ function getBeforeEndTiles() {
     ].map(x => new GameTile(x));
 }
 
-it('after restart is with single tile', () => {
+it('after reset is with single tile', () => {
     var board = getBoard();
 
-    board.restart();
+    board.reset();
 
     expect(board.tiles.filter(x => x.value > 0)).to.have.lengthOf(1);
 });

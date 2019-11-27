@@ -26,7 +26,7 @@ export class GameBoard {
         };
     }
 
-    restart() {
+    reset() {
         var initState = GameBoard.getInitState();
         this.tiles = initState.tiles;
         this.isTotallyBlocked = initState.isTotallyBlocked;

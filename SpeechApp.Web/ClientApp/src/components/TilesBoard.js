@@ -3,7 +3,6 @@ import { TilesList } from './TilesList';
 import GameMessage from './GameMessage';
 import { connect } from 'react-redux';
 import { reset, initialize } from '../redux/actions/index'
-import KeyboardInput from './KeyboardInput';
 
 class TilesBoard extends Component {
     constructor(props) {
@@ -23,13 +22,10 @@ class TilesBoard extends Component {
     render() {
         return (
             <div>
-                <KeyboardInput />
-                <button onClick={this.props.reset}>Restart</button>
-                <div className="board">
+                <div className="tilesBoard">
                     {this.props.isTotallyBlocked && <GameMessage />}
                     <TilesList tiles={this.state.tiles}/>
                 </div>
-                {React.version}
             </div>
         );
     }

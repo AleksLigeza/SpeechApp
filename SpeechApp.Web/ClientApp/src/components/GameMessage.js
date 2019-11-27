@@ -6,7 +6,7 @@ class GameMessage extends Component {
     render() {
         return (
             <div className='gameMessage'>
-                <h3>Game over</h3>
+                <h2>Game over</h2>
                 <button className='resetButton'
                     onClick={this.props.reset}>
                     Reset

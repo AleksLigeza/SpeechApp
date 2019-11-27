@@ -1,2 +1,14 @@
 $tile-size: 100px;
 $tile-margin: 5px;
+$board-size: 4 * $tile-size + 8 * $tile-margin + 12px;
+$dashboard-size: 40px;
+$color-text-dark: #776e65;
+$color-background-dark: #8f7a66;
+
+$tile-size-mobile: 60px;
+$board-size-mobile: 4 * $tile-size-mobile + 8 * $tile-margin + 12px;;
+
+$screen-sm-min: 576px;
+$screen-md-min: 768px;
+$screen-lg-min: 992px;
+$screen-xl-min: 1200px;
