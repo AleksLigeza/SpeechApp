@@ -88,17 +88,11 @@ export class HubClient extends Component {
 
     processAudio(audioProcessingEvent) {
         var inputBuffer = audioProcessingEvent.inputBuffer;
-        var outputBuffer = audioProcessingEvent.outputBuffer;
 
         var isampleRate = inputBuffer.sampleRate;
         var osampleRate = 16000;
         var inputData = inputBuffer.getChannelData(0);
-        var outputData = outputBuffer.getChannelData(0);
         var output = this.downsampleArray(isampleRate, osampleRate, inputData);
-
-        for (var i = 0; i < outputBuffer.length; i++) {
-            outputData[i] = inputData[i];
-        }
 
         this.voiceHub.send("ReceiveAudio", new Uint8Array(output.buffer));
     }

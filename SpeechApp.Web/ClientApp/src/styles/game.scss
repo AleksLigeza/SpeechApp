@@ -23,6 +23,25 @@
     }
 }
 
+.volumeSlider {
+    width: 100%;
+    height: 40px;
+
+    .rc-slider {
+        margin: 10px;
+        width: initial;
+    }
+
+    .rc-slider-track { 
+        background-color: $color-background-dark;
+    }
+
+    .rc-slider-handle { 
+        border: solid 2px $color-background-dark;
+        background-color: $color-background-dark;
+    }
+}
+
 .audioVisualizer {
     width: $board-size;
     display: inline-block;
