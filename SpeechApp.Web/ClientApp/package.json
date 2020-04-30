@@ -12,7 +12,7 @@
     "enzyme": "^3.10.0",
     "enzyme-adapter-react-16": "^1.15.1",
     "jest-enzyme": "^7.1.2",
-    "jquery": "^3.4.1",
+    "jquery": "^3.5.0",
     "merge": "^1.2.1",
     "node-sass": "^4.13.0",
     "oidc-client": "^1.9.0",
